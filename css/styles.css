@@ -1,0 +1,19 @@
+*{
+    box-sizing: border-box;
+}
+.body{
+    background-color: black;
+    font-family: Retro-Font;
+    color: white;
+    
+}
+.container{
+    margin: 5% auto;
+    height: 800px;
+    width: 800px;
+    position: relative;
+    display: grid;
+    place-content: center;
+    background-color: white;
+    
+}
