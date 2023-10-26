@@ -1,3 +1,4 @@
+/*Configuracion Inicial*/
 *{
     box-sizing: border-box;
 }
@@ -15,5 +16,70 @@
     display: grid;
     place-content: center;
     background-color: white;
-    
+}
+/*Configuracion Juego*/
+.bg-img{
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 70px 300px 70px 300px 70px;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+.game__panel{
+    width: 800px;
+    height: 800px;
+    grid-area: 1 / 1 / 2 / 2;
+    position: relative;
+    background-color: white;
+}
+/*Capas Fondo Mapa*/
+.cesped__panel{
+    width: 100%;
+    height: 70px;
+    background: url(../assets/img/pasto.png);
+}
+.carretera__panel{
+    width: 100%;
+    height: 300px;
+    background-color: black;
+}
+.agua__panel{
+    width: 100%;
+    height: 300px;
+    background:url(../assets/img/agua.png);
+}
+/*Titulo y Subtitulo Inicial*/
+.tit__game{
+    position: absolute;
+    color: #23eb08;
+    top: 100px;
+    left: 120px;
+    font-size: 100px;
+    text-shadow: 0  2px 0 #41330a,
+               0  4px 0 #41330a,
+               0  6px 0 #41330a,
+               0  8px 0 #41330a,
+               0 10px 0 #f6ff00,
+               0 12px 0 #ffff00;
+}
+.subtit__game{
+    position: absolute;
+    top: 500px;
+    left: 175px;
+    font-size: 30px;
+    animation-name: blink;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+}
+/*Animación Inicial*/
+@keyframes blink {
+    0%{
+        opacity: 0;
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+    }
 }
