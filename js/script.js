@@ -52,7 +52,8 @@ const generarVias=()=>{
     fragment_rio.append(generarObjetos('DIV','via__rio'))
     game.children[1].append(fragment_rio)
 }
-const generarObstaculos=()=>{
+const generarRana=()=>{
+    //Generar Rana
     let frogg=document.createElement('DIV')
     frogg.classList.add('frogg_img')
     frogg.id='frogg'
@@ -60,10 +61,37 @@ const generarObstaculos=()=>{
     frogg.style.top=ranaY+'px';
     game.children[4].append(frogg);
 }
+const generarObstaculos=()=>{ 
+    //Generar Coches  
+    let posX=100
+    let contPar=0;
+    console.log(game.children[3].childNodes);
+    for (let i = 0; i < game.children[3].childNodes.length; i++) {
+        for (let j = 0; j < 3; j++) {
+            let coche=document.createElement('DIV')
+            coche.classList.add('car__display')
+            coche.style.left=posX+'px';
+            if (parseInt(coche.style.left)>720) {
+                coche.style.display='none'
+            }
+            game.children[3].children[i].append(coche)
+            posX+=300
+        }
+        contPar++;
+        if (contPar%2==0) {
+            posX=100
+        }else{
+            posX=200
+        }
+    }
+    
+
+}
 const inciarJuego=(e)=>{
     game.children[game.children.length-1].remove();
     game.children[game.children.length-1].remove();
     generarVias();
+    generarRana();
     generarObstaculos();
     document.removeEventListener(e.type,inciarJuego);
 }
@@ -97,11 +125,14 @@ const moverRana=(e)=>{
             break;
     } 
 }
+const moverObjetos=()=>{
+    
+}
 const moverJuego=(e)=>{
     moverRana(e);
     
-       
 }
+
 
 //Evento Generar Página
 document.addEventListener("DOMContentLoaded",generarPagina)
