@@ -91,7 +91,18 @@ const comprobarObstaculos=()=>{
     }
 }
 const comporbarColisiones=()=>{
-    
+    let agua=game.children[1]
+    for (let i = 0; i < agua.childNodes.length; i++) {
+        if (i%2==0) {
+            if (parseInt(agua.children[i].lastChild.style.left)>700) {
+                agua.children[i].lastChild.remove();
+            }
+        }else{
+            if (parseInt(agua.children[i].lastChild.style.left)<0) {
+                agua.children[i].lastChild.remove();
+            }
+        }
+    }
 }
 const moverObjetos=()=>{
     let agua=game.children[1]
