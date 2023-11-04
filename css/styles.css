@@ -2,6 +2,9 @@
 *{
     box-sizing: border-box;
 }
+html{
+    height: 90vh;
+}
 .body{
     background-color: black;
     font-family: Retro-Font;
@@ -92,7 +95,7 @@
 }
 .frogg_img{
     width: 50px;
-    left:440;
+    left:440,9px;
     height: 50px;
     position: absolute;
     background-image: url(../assets/img/crockicrocki.png);
@@ -103,6 +106,24 @@
     margin-top: 18px;
     position: absolute;
     background-image: url(../assets/img/carro1.png);
+    background-repeat: no-repeat;
+}
+.troncos__display{
+    width: 120px;
+    height: 50px;
+    margin-top: 18px;
+    position: absolute;
+    background-image: url(../assets/img/arbol.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.tortugas__display{
+    width: 100px;
+    height: 50px;
+    margin-top: 15px;
+    position: absolute;
+    background-image: url(../assets/img/tortugas.png);
+    background-size: cover;
     background-repeat: no-repeat;
 }
 

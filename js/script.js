@@ -1,6 +1,7 @@
 //Declaración de variables
 let score=document.getElementById('score');
 let game=document.getElementById('game');
+
 //Posicion de la Rana
 let ranaX=400;
 let ranaY=730;
@@ -8,48 +9,49 @@ let ranaY=730;
 //Generar Página
 const generarPagina=(e)=>{
     generarMapa();
-    game.append(generarObjetos('H1','tit__game','FROGGER'));
-    game.append(generarObjetos('H2','subtit__game','PRESS ANY KEY TO START'))
+    game.append(crearObjetos('H1','tit__game','FROGGER'));
+    game.append(crearObjetos('H2','subtit__game','PRESS ANY KEY TO START'))
 }
 
 //Función para generar Objetos
-const generarObjetos=(elemento,clase,txt)=>{
+const crearObjetos=(elemento,clase,txt,pos)=>{
     let objeto=document.createElement(elemento)
     objeto.classList.add(clase)
     objeto.textContent=txt
+    objeto.style.left=(0+pos)+'px';
     return objeto;
 }
 //Generar Mapa
 const generarMapa=()=>{
     let fragment=document.createDocumentFragment()
     //Crear Cesped superior
-    fragment.append(generarObjetos('DIV','cesped__panel'));
+    fragment.append(crearObjetos('DIV','cesped__panel'));
     //Crear Agua
-    fragment.append(generarObjetos('DIV','agua__panel'));
+    fragment.append(crearObjetos('DIV','agua__panel'));
     //Crear Cesped Central
-    fragment.append(generarObjetos('DIV','cesped__panel'));
+    fragment.append(crearObjetos('DIV','cesped__panel'));
     //Crear Carretera
-    fragment.append(generarObjetos('DIV','carretera__panel'));
+    fragment.append(crearObjetos('DIV','carretera__panel'));
     //Crear Cesped
-    fragment.append(generarObjetos('DIV','cesped__panel'));
+    fragment.append(crearObjetos('DIV','cesped__panel'));
     game.appendChild(fragment)
 }
 const generarVias=()=>{
     //Generar Vías
     let fragment=document.createDocumentFragment()
-    fragment.append(generarObjetos('DIV','via__carretera_primer_via'))
-    fragment.append(generarObjetos('DIV','via__carretera'))
-    fragment.append(generarObjetos('DIV','via__carretera'))
-    fragment.append(generarObjetos('DIV','via__carretera'))
-    fragment.append(generarObjetos('DIV','via__carretera'))
+    fragment.append(crearObjetos('DIV','via__carretera_primer_via'))
+    fragment.append(crearObjetos('DIV','via__carretera'))
+    fragment.append(crearObjetos('DIV','via__carretera'))
+    fragment.append(crearObjetos('DIV','via__carretera'))
+    fragment.append(crearObjetos('DIV','via__carretera'))
     game.children[3].append(fragment)
     //Generar rio
     let fragment_rio=document.createDocumentFragment()
-    fragment_rio.append(generarObjetos('DIV','via__rio'))
-    fragment_rio.append(generarObjetos('DIV','via__rio'))
-    fragment_rio.append(generarObjetos('DIV','via__rio'))
-    fragment_rio.append(generarObjetos('DIV','via__rio'))
-    fragment_rio.append(generarObjetos('DIV','via__rio'))
+    fragment_rio.append(crearObjetos('DIV','via__rio'))
+    fragment_rio.append(crearObjetos('DIV','via__rio'))
+    fragment_rio.append(crearObjetos('DIV','via__rio'))
+    fragment_rio.append(crearObjetos('DIV','via__rio'))
+    fragment_rio.append(crearObjetos('DIV','via__rio'))
     game.children[1].append(fragment_rio)
 }
 const generarRana=()=>{
@@ -61,38 +63,64 @@ const generarRana=()=>{
     frogg.style.top=ranaY+'px';
     game.children[4].append(frogg);
 }
-const generarObstaculos=()=>{ 
-    //Generar Coches  
-    let posX=100
-    let contPar=0;
-    console.log(game.children[3].childNodes);
-    for (let i = 0; i < game.children[3].childNodes.length; i++) {
-        for (let j = 0; j < 3; j++) {
-            let coche=document.createElement('DIV')
-            coche.classList.add('car__display')
-            coche.style.left=posX+'px';
-            if (parseInt(coche.style.left)>720) {
-                coche.style.display='none'
-            }
-            game.children[3].children[i].append(coche)
-            posX+=300
-        }
-        contPar++;
-        if (contPar%2==0) {
-            posX=100
+const generarAleatorio=(max)=>{
+    return Math.floor(Math.random()*max)
+}
+const generarObstaculosIni=()=>{
+    let agua=game.children[1]
+    for (let i = 0; i < agua.childNodes.length; i++) {
+        if(i%2==0){
+            agua.children[i].append(crearObjetos('DIV','troncos__display','',generarAleatorio(400)))
         }else{
-            posX=200
+            agua.children[i].append(crearObjetos('DIV','tortugas__display','',generarAleatorio(800)))
         }
     }
+}
+const comprobarObstaculos=()=>{
+    let agua=game.children[1]
+    for (let i = 0; i < agua.childNodes.length; i++) {
+        if (i%2==0) {
+            if (parseInt(agua.children[i].children[0].style.left)>400) {
+                agua.children[i].insertBefore(crearObjetos('DIV','troncos__display','',0), agua.children[i].firstChild);
+            }
+        }else{
+            if (parseInt(agua.children[i].children[0].style.left)<500) {
+                agua.children[i].insertBefore(crearObjetos('DIV','tortugas__display','',700), agua.children[i].firstChild);
+            }
+        }
+    }
+}
+const comporbarColisiones=()=>{
     
-
+}
+const moverObjetos=()=>{
+    let agua=game.children[1]
+    let velocidad=2
+    for (let i = 0; i < agua.childNodes.length; i++) {
+        for (let j = 0; j < agua.children[i].childNodes.length; j++) {
+            if (i%2==0) {
+                posX=parseInt(agua.children[i].children[j].style.left);
+                posX+=velocidad
+                agua.children[i].children[j].style.left=posX+'px';
+            }else{
+                posX=parseInt(agua.children[i].children[j].style.left);
+                posX-=velocidad
+                agua.children[i].children[j].style.left=posX+'px';
+            }
+        }
+        velocidad=velocidad-0.2;
+    }
+    comporbarColisiones()
+    comprobarObstaculos()
 }
 const inciarJuego=(e)=>{
     game.children[game.children.length-1].remove();
     game.children[game.children.length-1].remove();
     generarVias();
     generarRana();
-    generarObstaculos();
+    generarObstaculosIni();
+    //Intervalo de Movimiento a 16ms/60fps 
+    setInterval(moverObjetos,16);
     document.removeEventListener(e.type,inciarJuego);
 }
 const moverRana=(e)=>{
@@ -125,19 +153,14 @@ const moverRana=(e)=>{
             break;
     } 
 }
-const moverObjetos=()=>{
-    
-}
-const moverJuego=(e)=>{
-    moverRana(e);
-    
-}
+
+
 
 
 //Evento Generar Página
 document.addEventListener("DOMContentLoaded",generarPagina)
 //Evento Empezar a Jugar
 document.addEventListener('keydown',inciarJuego)
-//
+
 //Posicion de rana
-document.addEventListener('keydown',moverJuego)
+document.addEventListener('keydown',moverRana)
