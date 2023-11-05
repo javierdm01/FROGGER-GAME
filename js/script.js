@@ -1,6 +1,7 @@
 //Declaración de variables
 let score=document.getElementById('score');
 let game=document.getElementById('game');
+let crono=document.getElementById('crono')
 
 //Posicion de la Rana
 let ranaX=400;
@@ -54,8 +55,8 @@ const generarVias=()=>{
     fragment_rio.append(crearObjetos('DIV','via__rio'))
     game.children[1].append(fragment_rio)
 }
+//Generar Rana
 const generarRana=()=>{
-    //Generar Rana
     let frogg=document.createElement('DIV')
     frogg.classList.add('frogg_img')
     frogg.id='frogg'
@@ -63,6 +64,27 @@ const generarRana=()=>{
     frogg.style.top=ranaY+'px';
     game.children[4].append(frogg);
 }
+//Eliminar Rana
+const eliminarRana=()=>{
+    frogg.remove();
+    ranaX=400
+    ranaY=730
+    generarRana();
+    crono.children[0].lastChild.remove();
+    crono.children[1].children[0].style.width=400+'px'
+    contadorMuertes++;
+    if(contadorMuertes>=3){
+        clearInterval(intervaloMovimiento)
+        intervaloMovimiento = null;
+        clearInterval(intervaloCrono)
+        intervaloCrono=null
+        let lose=document.createElement('H2')
+        lose.textContent='GAME OVER ¿CONTINUAR?'
+        lose.classList.add('lose__text')
+        game.append(lose)
+    }
+}
+//Generador de números aleatorios
 const generarAleatorio=(max)=>{
     return Math.floor(Math.random()*max)
 }
@@ -146,28 +168,24 @@ const comprobarRana=()=>{
     if (Math.floor(parseInt(frogg.style.top)/60)<=5 && Math.floor(parseInt(frogg.style.top)/60)>=1) {
         for (let i = 0; i < agua.children[agua_rana].childNodes.length; i++) {
             let posX=parseInt(agua.children[agua_rana].children[i].style.left);
-            if (i%2==0) {
-                console.log(parseInt(agua.children[agua_rana].children[i].style.left));
-                if(parseInt(frogg.style.left)>posX && parseInt(frogg.style.left)<posX+120){
-                    console.log('hola');
+            if(parseInt(frogg.style.left)>posX && parseInt(frogg.style.left)<posX+100){
+                if (agua_rana%2==0) {
                     let result=parseInt(frogg.style.left)+1
                     frogg.style.left=result+'px';
                     ranaX=result
+                }else{
+                    let result=parseInt(frogg.style.left)-2
+                    frogg.style.left=result+'px';
+                    ranaX=result
                 }
-            }else{
-                
-                
-            }
+            }            
         }
     }
     if (Math.floor(parseInt(frogg.style.top)/60)<=11 && Math.floor(parseInt(frogg.style.top)/60)>=7) {
         for (let i = 0; i < via.children[via_rana].childNodes.length; i++) {
             let posX=parseInt(via.children[via_rana].children[i].style.left);
             if(parseInt(frogg.style.left)>posX-40 && parseInt(frogg.style.left)<posX+60){
-                frogg.remove();
-                ranaX=400
-                ranaY=730
-                generarRana();
+                eliminarRana()
             }
         }
     }
@@ -177,7 +195,7 @@ const comprobarRana=()=>{
 const moverObjetos=()=>{
     let agua=game.children[1]
     let via=game.children[3]
-    let velocidad=1.6
+    let velocidad=1.8
     for (let i = 0; i < agua.childNodes.length; i++) {
         for (let j = 0; j < agua.children[i].childNodes.length; j++) {
             if (i%2==0) {
@@ -207,14 +225,24 @@ const moverObjetos=()=>{
     comprobarObstaculos()
     comprobarRana()
 }
+const cuentaCrono=()=>{
+    let tamanio=parseInt(crono.children[1].children[0].clientWidth)
+    tamanio--
+    crono.children[1].children[0].style.width=tamanio+'px'
+    if(tamanio==0){
+        eliminarRana();
+    }
+}
 const inciarJuego=(e)=>{
     game.children[game.children.length-1].remove();
     game.children[game.children.length-1].remove();
     generarVias();
     generarRana();
+    generarCrono();
+    intervaloCrono=setInterval(cuentaCrono,16)
     generarObstaculosIni();
     //Intervalo de Movimiento a 16ms/60fps 
-    setInterval(moverObjetos,16);
+    intervaloMovimiento=setInterval(moverObjetos,16);
     document.removeEventListener(e.type,inciarJuego);
 }
 const moverRana=(e)=>{
@@ -247,10 +275,26 @@ const moverRana=(e)=>{
             break;
     } 
 }
-
-
-
-
+const generarCrono=()=>{
+    let fragment=document.createDocumentFragment()
+    for (let i = 3; i > contadorMuertes; i--) {
+        let imagen=document.createElement('IMG')
+        imagen.src='../assets/img/crockicrocki.png'
+        imagen.classList.add('crono__ranitas')
+        fragment.append(imagen)
+    }
+    crono.children[0].append(fragment)
+        let barra=document.createElement('DIV')
+        barra.classList.add('bar__crono')
+        crono.children[1].append(barra)
+        let texto=document.createElement('P')
+        texto.classList.add('crono__text')
+        texto.textContent='TIME'
+        crono.children[1].append(texto)
+}
+let intervaloCrono;
+let intervaloMovimiento;
+let contadorMuertes=0
 //Evento Generar Página
 document.addEventListener("DOMContentLoaded",generarPagina)
 //Evento Empezar a Jugar

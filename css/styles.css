@@ -9,16 +9,17 @@ html{
     background-color: black;
     font-family: Retro-Font;
     color: white;
-    
+    width: 99%;
+    height: 99%;
+
 }
 .container{
     margin: 5% auto;
-    height: 780px;
-    width: 780px;
+    height: 80%;
+    width: 80%;
     position: relative;
     display: grid;
     place-content: center;
-    background-color: white;
 }
 /*Configuracion Juego*/
 .bg-img{
@@ -28,12 +29,52 @@ html{
     grid-column-gap: 0px;
     grid-row-gap: 0px;
 }
+/*Configuración del Crono*/
+.crono__timer{
+    width: 100%;
+    height: 50px;
+    position: relative;
+    display: flex;
+}
+.crono__frogg{
+    width: 100px;
+    height: 50px;
+    display: flex;
+}
+.crono__bar{
+    display: flex;
+    width: 100%;
+    height: 50px;
+}
+.crono__ranitas{
+    width: 40px;
+    height: 40px;
+    margin: auto;
+}
+.crono__text{
+    position: absolute;
+    left: 600px;
+    top: 0;
+    margin: 10px ;
+    font-size: 25px;
+}
+.bar__crono{
+    width: 400px;
+    background-color: #23eb08;
+    height: 30% ;
+    margin: auto 10px;
+    position: absolute;
+    top: 15px;
+    left: 175px;
+}
+/*Panel del Juego*/
 .game__panel{
+    min-width: 400px;
     width: 800px;
+    min-height: 380px;
     height: 780px;
     grid-area: 1 / 1 / 2 / 2;
     position: relative;
-    background-color: white;
 }
 /*Capas Fondo Mapa*/
 .cesped__panel{
@@ -74,7 +115,7 @@ html{
     animation-duration: 3s;
     animation-iteration-count: infinite;
 }
-/**/
+/*Carreteras*/
 .via__carretera{
     width: 100%;
     height: 60px;
@@ -93,6 +134,7 @@ html{
     height: 60px;
     position: relative;
 }
+/*Rana*/
 .frogg_img{
     width: 50px;
     left:440,9px;
@@ -100,6 +142,7 @@ html{
     position: absolute;
     background-image: url(../assets/img/crockicrocki.png);
 }
+/*Coches*/
 .car__display{
     width: 60px;
     height: 30px;
@@ -108,6 +151,7 @@ html{
     background-image: url(../assets/img/carro1.png);
     background-repeat: no-repeat;
 }
+/*Troncos*/
 .troncos__display{
     width: 120px;
     height: 50px;
@@ -117,6 +161,7 @@ html{
     background-size: contain;
     background-repeat: no-repeat;
 }
+/*Toncos*/
 .tortugas__display{
     width: 100px;
     height: 50px;
@@ -126,7 +171,19 @@ html{
     background-size: cover;
     background-repeat: no-repeat;
 }
-
+.lose__text{
+    position: absolute;
+    width: 450px;
+    height: 250px;
+    font-size: 40px;
+    top: 30%;
+    left: 20%;
+    text-align: center;
+    padding: 60px;
+    background-color: black;
+    border: 5px solid white;
+    border-style: dashed;
+}
 
 
 
