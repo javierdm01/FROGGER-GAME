@@ -7,13 +7,18 @@ let crono=document.getElementById('crono')
 let ranaX=400;
 let ranaY=730;
 
+//Variables Auxiliares
+let intervaloCrono;
+let intervaloMovimiento;
+let contadorMuertes=0
+let contadorGanar=0
+
 //Generar Página
 const generarPagina=(e)=>{
     generarMapa();
     game.append(crearObjetos('H1','tit__game','FROGGER'));
     game.append(crearObjetos('H2','subtit__game','PRESS ANY KEY TO START'))
 }
-
 //Función para generar Objetos
 const crearObjetos=(elemento,clase,txt,pos)=>{
     let objeto=document.createElement(elemento)
@@ -37,6 +42,7 @@ const generarMapa=()=>{
     fragment.append(crearObjetos('DIV','cesped__panel'));
     game.appendChild(fragment)
 }
+//GenerarCarriles
 const generarVias=()=>{
     //Generar Vías
     let fragment=document.createDocumentFragment()
@@ -88,6 +94,7 @@ const eliminarRana=()=>{
 const generarAleatorio=(max)=>{
     return Math.floor(Math.random()*max)
 }
+//Generar Obstaculos Iniciales
 const generarObstaculosIni=()=>{
     let agua=game.children[1]
     let via=game.children[3]
@@ -160,11 +167,16 @@ const comporbarColisiones=()=>{
         }
     }
 }
+//Comprobar Colisiones Rana con Objetos
 const comprobarRana=()=>{
+    
     let agua=game.children[1]
     let via=game.children[3]
     let via_rana=Math.floor(parseInt(frogg.style.top)/60)-7
     let agua_rana=Math.floor(parseInt(frogg.style.top)/60)-1
+    let bandera=0;
+    let anterior=0;
+    //Comprobación Agua
     if (Math.floor(parseInt(frogg.style.top)/60)<=5 && Math.floor(parseInt(frogg.style.top)/60)>=1) {
         for (let i = 0; i < agua.children[agua_rana].childNodes.length; i++) {
             let posX=parseInt(agua.children[agua_rana].children[i].style.left);
@@ -173,14 +185,19 @@ const comprobarRana=()=>{
                     let result=parseInt(frogg.style.left)+1
                     frogg.style.left=result+'px';
                     ranaX=result
+                    bandera++;
                 }else{
                     let result=parseInt(frogg.style.left)-2
                     frogg.style.left=result+'px';
                     ranaX=result
+                    bandera++;
                 }
-            }            
+                
+            }
+            
         }
     }
+    //Comprobación Vias
     if (Math.floor(parseInt(frogg.style.top)/60)<=11 && Math.floor(parseInt(frogg.style.top)/60)>=7) {
         for (let i = 0; i < via.children[via_rana].childNodes.length; i++) {
             let posX=parseInt(via.children[via_rana].children[i].style.left);
@@ -189,14 +206,31 @@ const comprobarRana=()=>{
             }
         }
     }
-    
+    //Comprobación Ganar
+    if (Math.floor(parseInt(frogg.style.top)/60)<=0) {
+        contadorGanar++
+        if(contadorGanar==3){
+            clearInterval(intervaloMovimiento)
+            intervaloMovimiento = null;
+            clearInterval(intervaloCrono)
+            intervaloCrono=null
+            let lose=document.createElement('H2')
+            lose.textContent='ENHORABUENA HAS GANADO'
+            lose.classList.add('lose__text')
+            game.append(lose)
+        }else{
+            eliminarRana();
+        }
+    }
 }
 //Moviemiento de Objetos
 const moverObjetos=()=>{
     let agua=game.children[1]
     let via=game.children[3]
     let velocidad=1.8
+    
     for (let i = 0; i < agua.childNodes.length; i++) {
+        //Movimiento Zona Agua
         for (let j = 0; j < agua.children[i].childNodes.length; j++) {
             if (i%2==0) {
                 let posX=parseInt(agua.children[i].children[j].style.left);
@@ -208,6 +242,7 @@ const moverObjetos=()=>{
                 agua.children[i].children[j].style.left=posX+'px';
             }
         }
+        //Movimiento Zona Vías
         for (let j = 0; j < via.children[i].childNodes.length; j++) {
             if (i%2==0) {
                 let posX=parseInt(via.children[i].children[j].style.left);
@@ -225,6 +260,7 @@ const moverObjetos=()=>{
     comprobarObstaculos()
     comprobarRana()
 }
+//Intervalo Crono
 const cuentaCrono=()=>{
     let tamanio=parseInt(crono.children[1].children[0].clientWidth)
     tamanio--
@@ -233,18 +269,7 @@ const cuentaCrono=()=>{
         eliminarRana();
     }
 }
-const inciarJuego=(e)=>{
-    game.children[game.children.length-1].remove();
-    game.children[game.children.length-1].remove();
-    generarVias();
-    generarRana();
-    generarCrono();
-    intervaloCrono=setInterval(cuentaCrono,16)
-    generarObstaculosIni();
-    //Intervalo de Movimiento a 16ms/60fps 
-    intervaloMovimiento=setInterval(moverObjetos,16);
-    document.removeEventListener(e.type,inciarJuego);
-}
+//Movimientos de Rana
 const moverRana=(e)=>{
     switch (e.key) {
         case 'ArrowRight':
@@ -275,6 +300,7 @@ const moverRana=(e)=>{
             break;
     } 
 }
+//Generar Objetos Crono
 const generarCrono=()=>{
     let fragment=document.createDocumentFragment()
     for (let i = 3; i > contadorMuertes; i--) {
@@ -292,13 +318,25 @@ const generarCrono=()=>{
         texto.textContent='TIME'
         crono.children[1].append(texto)
 }
-let intervaloCrono;
-let intervaloMovimiento;
-let contadorMuertes=0
+//Inicio del Juego
+const inciarJuego=(e)=>{
+    game.children[game.children.length-1].remove();
+    game.children[game.children.length-1].remove();
+    generarVias();
+    generarRana();
+    generarCrono();
+    intervaloCrono=setInterval(cuentaCrono,500)
+    generarObstaculosIni();
+    //Intervalo de Movimiento a 16ms/60fps 
+    intervaloMovimiento=setInterval(moverObjetos,16);
+    document.removeEventListener(e.type,inciarJuego);
+}
+
+//Eventos
+
 //Evento Generar Página
 document.addEventListener("DOMContentLoaded",generarPagina)
 //Evento Empezar a Jugar
 document.addEventListener('keydown',inciarJuego)
-
 //Posicion de rana
 document.addEventListener('keydown',moverRana)

@@ -20,6 +20,7 @@ html{
     position: relative;
     display: grid;
     place-content: center;
+    transform: scale(0.5);
 }
 /*Configuracion Juego*/
 .bg-img{
