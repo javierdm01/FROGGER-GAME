@@ -178,6 +178,7 @@ const comprobarRana=()=>{
     let anterior=0;
     //Comprobación Agua
     if (Math.floor(parseInt(frogg.style.top)/60)<=5 && Math.floor(parseInt(frogg.style.top)/60)>=1) {
+        debugger
         for (let i = 0; i < agua.children[agua_rana].childNodes.length; i++) {
             let posX=parseInt(agua.children[agua_rana].children[i].style.left);
             if(parseInt(frogg.style.left)>posX && parseInt(frogg.style.left)<posX+100){
@@ -185,14 +186,16 @@ const comprobarRana=()=>{
                     let result=parseInt(frogg.style.left)+1
                     frogg.style.left=result+'px';
                     ranaX=result
-                    bandera++;
                 }else{
                     let result=parseInt(frogg.style.left)-2
                     frogg.style.left=result+'px';
                     ranaX=result
-                    bandera++;
                 }
-                
+            }else{
+                bandera++;
+            }
+            if(agua.children[agua_rana].childNodes.length==bandera){
+                eliminarRana();
             }
             
         }
