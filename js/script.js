@@ -341,7 +341,6 @@ const perderJuego=()=>{
 const pantallaFinal=()=>{
     let textContadorFinal=document.createElement('A')
     textContadorFinal.classList.add('text_contadorFinal')
-    textContadorFinal.textContent=contadorFinal;
     game.append(textContadorFinal);
     setInterval(intervaloFinal,1000);
 }
