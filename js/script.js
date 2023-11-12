@@ -12,6 +12,7 @@ let intervaloCrono;
 let intervaloMovimiento;
 let contadorMuertes=0
 let contadorGanar=0
+let contadorFinal=5
 
 //Generar Página
 const generarPagina=(e)=>{
@@ -80,14 +81,7 @@ const eliminarRana=()=>{
     crono.children[1].children[0].style.width=400+'px'
     contadorMuertes++;
     if(contadorMuertes>=3){
-        clearInterval(intervaloMovimiento)
-        intervaloMovimiento = null;
-        clearInterval(intervaloCrono)
-        intervaloCrono=null
-        let lose=document.createElement('H2')
-        lose.textContent='GAME OVER ¿CONTINUAR?'
-        lose.classList.add('lose__text')
-        game.append(lose)
+        perderJuego();
     }
 }
 //Generador de números aleatorios
@@ -178,7 +172,6 @@ const comprobarRana=()=>{
     let anterior=0;
     //Comprobación Agua
     if (Math.floor(parseInt(frogg.style.top)/60)<=5 && Math.floor(parseInt(frogg.style.top)/60)>=1) {
-        debugger
         for (let i = 0; i < agua.children[agua_rana].childNodes.length; i++) {
             let posX=parseInt(agua.children[agua_rana].children[i].style.left);
             if(parseInt(frogg.style.left)>posX && parseInt(frogg.style.left)<posX+100){
@@ -207,22 +200,6 @@ const comprobarRana=()=>{
             if(parseInt(frogg.style.left)>posX-40 && parseInt(frogg.style.left)<posX+60){
                 eliminarRana()
             }
-        }
-    }
-    //Comprobación Ganar
-    if (Math.floor(parseInt(frogg.style.top)/60)<=0) {
-        contadorGanar++
-        if(contadorGanar==3){
-            clearInterval(intervaloMovimiento)
-            intervaloMovimiento = null;
-            clearInterval(intervaloCrono)
-            intervaloCrono=null
-            let lose=document.createElement('H2')
-            lose.textContent='ENHORABUENA HAS GANADO'
-            lose.classList.add('lose__text')
-            game.append(lose)
-        }else{
-            eliminarRana();
         }
     }
 }
@@ -321,6 +298,60 @@ const generarCrono=()=>{
         texto.textContent='TIME'
         crono.children[1].append(texto)
 }
+//Comprobar si ha ganado
+const comprobarGanar=()=>{
+    //Comprobación Ganar
+    if (Math.floor(parseInt(frogg.style.top)/60)<=0) {
+        contadorGanar++
+        if(contadorGanar==2){
+            clearInterval(intervaloMovimiento)
+            intervaloMovimiento = null;
+            clearInterval(intervaloCrono)
+            intervaloCrono=null
+            let lose=document.createElement('H2')
+            lose.classList.add('final_text')
+            lose.textContent='ENHORABUENA HAS GANADO'
+            game.append(lose)
+            clearInterval(intervaloGanar)
+            intervaloGanar=null;
+            pantallaFinal();
+        }else{
+            let rana=document.createElement('DIV')
+            rana.classList.add('frogg_img')
+            rana.style.top=0+'px'
+            rana.style.left=ranaX+'px';
+            game.append(rana)
+            eliminarRana();
+        }
+    }
+}
+//Perder juego
+const perderJuego=()=>{
+    clearInterval(intervaloMovimiento)
+    intervaloMovimiento = null;
+    clearInterval(intervaloCrono)
+    intervaloCrono=null
+    let lose=document.createElement('H2')
+    lose.textContent='GAME OVER ¿CONTINUAR?'
+    lose.classList.add('final_text')
+    game.append(lose)
+    pantallaFinal();
+}
+//Intervalor Pantalla Final
+const pantallaFinal=()=>{
+    let textContadorFinal=document.createElement('A')
+    textContadorFinal.classList.add('text_contadorFinal')
+    textContadorFinal.textContent=contadorFinal;
+    game.append(textContadorFinal);
+    setInterval(intervaloFinal,1000);
+}
+const intervaloFinal=(e)=>{
+    game.children[6].textContent=contadorFinal;
+    if(contadorFinal==0){
+        location.reload();
+    }
+    contadorFinal--;
+}
 //Inicio del Juego
 const inciarJuego=(e)=>{
     game.children[game.children.length-1].remove();
@@ -330,6 +361,7 @@ const inciarJuego=(e)=>{
     generarCrono();
     intervaloCrono=setInterval(cuentaCrono,500)
     generarObstaculosIni();
+    intervaloGanar=setInterval(comprobarGanar,100)
     //Intervalo de Movimiento a 16ms/60fps 
     intervaloMovimiento=setInterval(moverObjetos,16);
     document.removeEventListener(e.type,inciarJuego);

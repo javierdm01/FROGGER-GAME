@@ -172,10 +172,10 @@ html{
     background-size: cover;
     background-repeat: no-repeat;
 }
-.lose__text{
+.final_text{
     position: absolute;
     width: 450px;
-    height: 250px;
+    height: 270px;
     font-size: 40px;
     top: 30%;
     left: 20%;
@@ -184,6 +184,12 @@ html{
     background-color: black;
     border: 5px solid white;
     border-style: dashed;
+}
+.text_contadorFinal{
+    position: absolute;
+    top: 57%;
+    left: 47%;
+    font-size: 40px;
 }
 
 
