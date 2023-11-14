@@ -20,7 +20,7 @@ html{
     position: relative;
     display: grid;
     place-content: center;
-    transform: scale(0.5);
+    transform: scale(0.6);
 }
 /*Configuracion Juego*/
 .bg-img{
@@ -204,5 +204,10 @@ html{
     }
     100%{
         opacity: 0;
+    }
+}
+@media screen and(min-width:1061px){
+    .container{
+        transform:scale(1);
     }
 }

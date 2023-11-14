@@ -72,12 +72,14 @@ const generarRana=()=>{
     game.children[4].append(frogg);
 }
 //Eliminar Rana
-const eliminarRana=()=>{
+const eliminarRana=(e=true)=>{
     frogg.remove();
     ranaX=400
     ranaY=730
     generarRana();
-    crono.children[0].lastChild.remove();
+    if(e==true){
+        crono.children[0].lastChild.remove();
+    }
     crono.children[1].children[0].style.width=400+'px'
     contadorMuertes++;
     if(contadorMuertes>=3){
@@ -282,21 +284,25 @@ const moverRana=(e)=>{
 }
 //Generar Objetos Crono
 const generarCrono=()=>{
+    //Generar Ranitas del Crono
+    const rutaRelativa= './assets/img/crockicrocki.png'
+    let rutaAbsoluta= new URL(rutaRelativa, document.baseURI).href
     let fragment=document.createDocumentFragment()
     for (let i = 3; i > contadorMuertes; i--) {
         let imagen=document.createElement('IMG')
-        imagen.src='../assets/img/crockicrocki.png'
+        imagen.src=rutaAbsoluta
         imagen.classList.add('crono__ranitas')
         fragment.append(imagen)
     }
+    //Generar Barras Crono
     crono.children[0].append(fragment)
-        let barra=document.createElement('DIV')
-        barra.classList.add('bar__crono')
-        crono.children[1].append(barra)
-        let texto=document.createElement('P')
-        texto.classList.add('crono__text')
-        texto.textContent='TIME'
-        crono.children[1].append(texto)
+    let barra=document.createElement('DIV')
+    barra.classList.add('bar__crono')
+    crono.children[1].append(barra)
+    let texto=document.createElement('P')
+    texto.classList.add('crono__text')
+    texto.textContent='TIME'
+    crono.children[1].append(texto)
 }
 //Comprobar si ha ganado
 const comprobarGanar=()=>{
@@ -320,8 +326,9 @@ const comprobarGanar=()=>{
             rana.classList.add('frogg_img')
             rana.style.top=0+'px'
             rana.style.left=ranaX+'px';
-            game.append(rana)
-            eliminarRana();
+            game.children[0].append(rana)
+            eliminarRana(false);
+            
         }
     }
 }
@@ -339,10 +346,14 @@ const perderJuego=()=>{
 }
 //Intervalor Pantalla Final
 const pantallaFinal=()=>{
+    document.removeEventListener('keydown',moverRana)
     let textContadorFinal=document.createElement('A')
     textContadorFinal.classList.add('text_contadorFinal')
     game.append(textContadorFinal);
     setInterval(intervaloFinal,1000);
+    document.addEventListener('keydown',()=>{
+        location.reload();
+    })
 }
 const intervaloFinal=(e)=>{
     game.children[6].textContent=contadorFinal;
