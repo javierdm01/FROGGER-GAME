@@ -79,9 +79,9 @@ const eliminarRana=(e=true)=>{
     generarRana();
     if(e==true){
         crono.children[0].lastChild.remove();
+        contadorMuertes++;
     }
     crono.children[1].children[0].style.width=400+'px'
-    contadorMuertes++;
     if(contadorMuertes>=3){
         perderJuego();
     }
