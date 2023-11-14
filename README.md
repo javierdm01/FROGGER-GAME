@@ -1,2 +1,2 @@
 # FROGGER-GAME
-Este es el proyecto de Forgger que estoy desarrollando.
+Juego de Frogger completo, hecho por mi, para una practica de DWEC
